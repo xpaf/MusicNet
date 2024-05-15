@@ -9,7 +9,6 @@ from torch.utils.data import DataLoader
 
 
 class GtzanDataModule(lightning.LightningDataModule):
-
     def __init__(self, split_seed: int, batch_size: int, shuffle_datasets: bool):
         super().__init__()
         self.test_dataset = None
