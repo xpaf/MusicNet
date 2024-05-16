@@ -65,15 +65,19 @@ class MusicClassifier(lightning.LightningModule):
     def on_validation_epoch_end(self):
         outs = torch.stack(self.validation_step_outputs)
         avg_loss = outs.mean()
-        self.logger.experiment.add_scalars('train and vall losses',
+        self.logger.experiment.add_scalars('train and val losses',
                                            {'train': self.current_epoch_training_loss.item(), 'val': avg_loss.item()},
                                            self.current_epoch)
         self.validation_step_outputs.clear()
 
     def test_step(self, batch, batch_idx):
         loss, acc = self.common_validation_and_test_step(batch, batch_idx)
-        self.log('test_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        self.log('test_acc', acc, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log_dict(
+            {"test_loss": loss, "test_acc": acc},
+            on_step=True,
+            on_epoch=True,
+            prog_bar=True
+        )
         return {'test_loss': loss, 'test_acc': acc}
 
     def configure_optimizers(self):
