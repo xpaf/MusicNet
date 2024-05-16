@@ -54,8 +54,12 @@ class MusicClassifier(lightning.LightningModule):
     def validation_step(self, batch, batch_idx):
         loss, acc = self.common_validation_and_test_step(batch, batch_idx)
         self.validation_step_outputs.append(loss)
-        self.log('val_loss', loss, on_step=True, on_epoch=True, prog_bar=True, logger=True)
-        self.log('val_acc', acc, on_step=True, on_epoch=True, prog_bar=True, logger=True)
+        self.log_dict(
+            {"val_loss": loss, "val_acc": acc},
+            on_step=True,
+            on_epoch=True,
+            prog_bar=True
+        )
         return {'val_loss': loss, 'val_acc': acc}
 
     def on_validation_epoch_end(self):
