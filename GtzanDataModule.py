@@ -9,14 +9,13 @@ from torch.utils.data import DataLoader
 
 
 class GtzanDataModule(lightning.LightningDataModule):
-    def __init__(self, split_seed: int, batch_size: int, shuffle_datasets: bool):
+    def __init__(self, split_seed: int, batch_size: int):
         super().__init__()
         self.test_dataset = None
         self.val_dataset = None
         self.train_dataset = None
         self.split_seed: int = split_seed
         self.batch_size: int = batch_size
-        self.shuffle_datasets: bool = shuffle_datasets
         self.transformer = transforms.Compose([
             transforms.Resize((128, 216)),
             transforms.Grayscale(num_output_channels=1),
@@ -49,7 +48,7 @@ class GtzanDataModule(lightning.LightningDataModule):
         return DataLoader(
             self.train_dataset,
             batch_size=self.batch_size,
-            shuffle=self.shuffle_datasets
+            shuffle=True
         )
 
     def val_dataloader(self) -> DataLoader:
