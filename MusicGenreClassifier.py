@@ -10,7 +10,7 @@ class MusicClassifier(lightning.LightningModule):
     def __init__(self, model):
         super().__init__()
         self.model: nn.Module = model
-        self.lr: float = 0.0002
+        self.lr: float = 0.0001
         self.num_classes: int = 10
         self.current_epoch_training_loss = torch.tensor(0.0)
         self.training_step_outputs = []
@@ -82,5 +82,5 @@ class MusicClassifier(lightning.LightningModule):
 
     def configure_optimizers(self):
         optimizer = torch.optim.Adam(self.parameters(), lr=self.lr)
-        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.1)
+        lr_scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=8, gamma=0.1)
         return [optimizer], [lr_scheduler]
